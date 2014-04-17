@@ -1,0 +1,134 @@
+﻿@model twd_project.ViewModels.CreateIntake
+
+<script type="text/javascript">
+    var datefield = document.createElement("input")
+    datefield.setAttribute("type", "date")
+    if (datefield.type != "date") {
+        document.write('<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />\n')
+        document.write('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"><\/script>\n')
+        document.write('<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"><\/script>\n')
+    }
+</script>
+
+<script>
+    if (datefield.type != "date") {
+        jQuery(function ($) {
+            $('#startDate').datepicker();
+        })
+    }
+    if (datefield.type != "date") {
+        jQuery(function ($) {
+            $('#endDate').datepicker();
+        })
+    }
+</script>
+
+@{  ViewBag.Title = "CreateIntake";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string message = ViewBag.Message;
+}
+
+<!-- ******************* Heading ******************* -->
+<h2>Create Intake</h2>
+<hr /><br />
+
+<p>@message</p>
+
+<div class="row">
+    <!-- ******************* Navigation ******************* -->
+    <div class="col-lg-4 col-lg-offset-1">
+        <h4 style="line-height: 1.4em;width:200px;display:inline;">Current Intakes</h4><hr style="margin-top:0;" />
+ 
+        <div class="col-lg-offset-1">
+            <table>
+                @{  foreach (twd_project.Intake item in Model.Intakes) {
+                        <tr><td>@Html.ActionLink(@item.intake1, "BuildIntake", new { intakeId = @item.intakeId })</td>
+                            <td>&nbsp;&nbsp; - &nbsp;&nbsp;@String.Format("{0:d}", item.startDate)&nbsp;&nbsp; to &nbsp;&nbsp;@String.Format("{0:d}", item.endDate) </td>
+                        </tr>
+                    }                    
+                }
+            </table>
+        </div>
+    </div>
+
+    <!-- ******************* Intake Buttons ******************* -->
+    <div class="col-lg-6"><br />
+        <button class="btn btn-primary" style="width: 200px;" data-toggle="modal" data-target="#createIntakeModal">Create new Intake</button>&nbsp;&nbsp;
+        <button class="btn btn-primary" style="width: 200px;" data-toggle="modal" data-target="#removeIntakeModal">Remove an Intake</button>
+    </div>
+</div>
+
+<!-- ******************* Create Intake Modal ******************* -->
+<div class="modal fade" id="createIntakeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 350px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="createIntakeLabel">Create Intake</h3>
+            </div>
+            
+            <div class="modal-body">
+                <form class="form-horizontal" action="/Home/AddIntake" method="post" role="form">
+                    @{  string intakePrefix = Model.Intakes[0].intake1.Substring(0, 3);
+
+                        int intakeNumber = Convert.ToInt32(Model.Intakes[0].intake1.Substring(3, 2)) + 1;
+                        string newIntake = "";
+                        if (intakeNumber < 10) {
+                            newIntake = intakePrefix + "0" + intakeNumber;
+                        } else {
+                            newIntake = intakePrefix + intakeNumber;
+                        }
+                    }
+
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="intake1" value="@newIntake"><br />
+                        <input type="date" id="startDate" name="startDate"/>&nbsp;<span>Start Date</span><br /><br />
+                        <input type="date" id="endDate" name="endDate"/>&nbsp;<span>End Date</span><br /><br />
+                    </div>
+
+			        <div>
+				        <div class="controls">
+					        <input type="submit" class="btn btn-primary" value="Create New Intake" />
+				        </div>
+			        </div>
+		        </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- ******************* Remove Intake Modal ******************* -->
+<div class="modal fade" id="removeIntakeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 350px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="removeIntakeLabel">Remove Intake</h3>
+            </div>
+            
+            <div class="modal-body">
+                <form class="form-horizontal" action="/Home/RemoveIntake" method="post" role="form">
+
+                    <select class="form-control" name="intakeId">
+                        @{  foreach (twd_project.Intake item in Model.Intakes) {
+                                <option value="@item.intakeId">@item.intake1</option>
+                            } 
+                        }
+                    </select><br /><br />
+
+			        <div>
+				        <div class="controls">
+					        <input type="submit" class="btn btn-primary" value="Remove Intake" />
+				        </div>
+			        </div>
+		        </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+   @* @Scripts.Render("~/Resources/js/createIntake.js")///////////////////////////////////////////////////////*@
+}

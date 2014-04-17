@@ -1,0 +1,52 @@
+﻿@model twd_project.ViewModels.BuildIntake
+
+@{
+    ViewBag.Title = "SelectModule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <h2>Module <small>Select</small>&nbsp;&nbsp;-&nbsp;&nbsp;  @Html.DisplayFor(model => model.IntakeName)  &nbsp;&nbsp;<small>@Model.StartDate &nbsp;&nbsp; to &nbsp;&nbsp;@Model.EndDate</small></h2><hr />
+    <br />
+
+<div class="row">
+
+    <div class="col-lg-4 col-lg-offset-1">
+        <div class="">
+            <ul style="list-style: none;" >
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="font-size:1.3em;">@Html.DisplayFor(model => model.IntakeName)<b class="caret"></b></a>
+                    <ul style="list-style: none;" class="dropdown-menu">
+                        @{  foreach (twd_project.Intake item in Model.Intakes) {
+                            <li style="width: 140px;" >@Html.ActionLink(@item.intake1, "SelectModule", new{ intakeId = @item.intakeId })</li>
+                            } 
+                        }
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-offset-1">
+            <table>
+                @{  int totalPC = 0;
+
+                    foreach (twd_project.Module item in Model.Modules) {
+                        <tr><td class="text-right">@item.moduleWeight  Credits -</td><td>@Html.ActionLink(@item.module1, "SelectCourse", new { moduleId = @item.moduleId })</td></tr>
+
+                        totalPC += Convert.ToInt32(item.moduleWeight);                
+                    }   
+
+                    <tr><td>@totalPC.ToString() Credits </td><td>Total</td></tr>
+                }
+            </table>
+        </div><br />
+
+
+
+
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Resources/js/buildIntake.js")
+
+}

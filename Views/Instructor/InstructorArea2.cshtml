@@ -1,0 +1,60 @@
+﻿@model twd_project.TWD_User
+
+@{
+    ViewBag.Title = "InstructorArea";
+    Layout = "~/Views/Shared/_InstructorLayout.cshtml";
+}
+
+<div class="container">
+
+    @{
+        if (ViewBag.Message != null)
+        {
+        <h2>@ViewBag.Message</h2>
+        }
+    }
+    <hr />
+    <br />
+
+
+    <div class="row">
+        <div class="col-lg-2">
+            <h4>Current Intakes</h4>
+            <hr style="margin-top: 0;" />
+
+            @{
+                foreach (string intake in intakes)
+                { 
+                <p>@intake</p>
+                } 
+            }
+        </div>
+
+        <div class="col-lg-4">
+            <h4>Select Intake</h4>
+            <hr style="margin-top: 0;" />
+
+            <form action="/Instructor/SelectModule" method="post" role="form" style="width: 100px">
+                <select class="form-control" name="intake">
+                    @{
+                        foreach (string intake in intakes)
+                        { 
+                        <option value="@intake">@intake</option>
+                        } 
+                    }
+                </select>
+                <br />
+                <p>
+                    <input type="submit" value="Select" /></p>
+            </form>
+            <br />
+            <br />
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Resources/js/buildIntake.js")
+}
