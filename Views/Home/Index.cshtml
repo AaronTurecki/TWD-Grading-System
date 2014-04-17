@@ -1,0 +1,226 @@
+﻿@model twd_project.ViewModels.LoginModel
+@using twd_project.Helpers
+
+@{
+    Layout = null;
+    string message = ViewBag.Message;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    @Styles.Render("~/Resources/css/bootstrap.min.css")
+    @Styles.Render("~/Resources/css/styles.css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</head>
+<body>
+    <section class="container">    
+        <div class="col-lg-6 login">
+            <div class="well">
+                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "bs-example form-horizontal" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <fieldset>
+                        <legend>Log In</legend>
+                        <div class="form-group">
+                            <label for="userName" class="col-lg-3 control-label">User Name</label>
+                            <div class="col-lg-9">                        
+                        <input class="form-control" data-val="true" data-val-required="The User name field is required." id="UserName" name="UserName" type="text" value="" />
+
+                        @Html.ValidationMessageFor(model => model.UserName)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-lg-3 control-label">Password</label>
+                            <div class="col-lg-9">                        
+                        <input class="form-control" data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password" value="" />
+                        @Html.ValidationMessageFor(model => model.Password)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-3">
+                                <button type="submit" class="btn btn-primary">Submit</button><br /><br />
+                                <a href="#" data-toggle="modal" data-target="#forgotPassword">Forgot Password?</a><br /><br />
+
+                                
+                            </div>
+                            <p style="padding-left:45px;" class="col-lg-11">@message</p>
+                            
+
+                        </div>
+                    </fieldset>              
+                      }
+            </div>
+            <table class="table">
+                <tr>
+                    <th>Role</th>
+                    <th>UserName</th>
+                    <th>Password</th>
+                </tr>
+                <tr>
+                    <td>Admin</td>
+                    <td>admin@bcit.ca</td>
+                    <td>twdssd</td>
+                </tr>
+                <tr>
+                    <td>Instructor</td>
+                    <td>instructor@bcit.ca</td>
+                    <td>twdssd</td>
+                </tr>
+                <tr>
+                    <td>Student</td>
+                    <td>mames@my.bcit.ca</td>
+                    <td>twdssd</td>
+                </tr>
+            </table>
+            <a href="#" data-toggle="modal" data-target="#requirements">Requirements</a>
+        </div>
+
+        
+
+        <!-- ******************* Forgot Password Modal ******************* -->
+        <div class="modal fade" id="forgotPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 660px;">
+            <div class="modal-content">
+                <div style="margin-left:50px;margin-right:50px;margin-top:20px;height:450px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="forgotPasswordLabel">Reset Password</h3>
+                </div>
+            
+                <div class="modal-body">
+                    <div class="well">
+        @using (Html.BeginForm("ResetPassword", "Home", FormMethod.Post, new { @class = "bs-example form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+                <div class="form-group">
+                    <label for="txtEmail" class="col-lg-3 control-label">Email</label>
+                    <div class="col-lg-6">
+                        <input class="form-control" type="text" id="txtEmail" name="txtEmail" placeholder="Enter Email" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="captcha" class="col-lg-3 control-label">Verification</label>
+                    <div class="col-lg-6">
+                        @Html.Raw(Html.GenerateCaptcha())
+                        @Html.ValidationMessage("recaptcha")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-2 col-lg-offset-3">
+                        <button id="add_biz" type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </div>           
+        }
+    </div>
+                </div><!-- /.modal-body -->
+               </div><!-- content styling -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!-- ******************* Requirements Modal ******************* -->
+        <div class="modal fade" id="requirements" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 700px;">
+            <div class="modal-content">
+                <div style="margin-left:50px;margin-right:50px;margin-top:20px;height:100%;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="requirementsLabel">Requirements</h3>
+                </div>
+            
+                <div class="modal-body">
+<h2>Essential</h2>
+<b>IMPORTANT FEATURES</b><br /><br />
+
+Log In for all three types of users: Administrator, Instructor, Student.<br /><br />
+
+<b>1.	ADMINISTRATOR ACCOUNT</b><br /><br />
+
+Once logged in, the administrator will have full access to the following features:<br /><br />
+
+<b>Create / Modify Class</b><br /><br />
+•	ability to create new intake with pre-set modules<br />
+•	ability to add/remove students for created intake, including first name, last name, email, and password <br /><br />
+
+<b>Create / Modify Instructor</b><br /><br />
+•	ability to create/modify instructors including log-in credentials<br /><br />
+
+<b>Create / Modify Course</b><br /><br />
+•	ability to add a course to a created intake/module<br />
+•	ability to assign instructor(s)<br />
+•	ability to add course name and gradeable items <br /><br />
+
+<b>Enter Grades / Review Student Grades</b><br /><br />
+•	ability to choose from a list of students (first name and last name)<br />
+•	ability to choose courses via course name<br />
+•	ability to choose modules<br />
+•	ability to add and modify grades for labs, participation, tests, and assignments<br />
+•	ability to add comments on assignments<br /><br />
+
+<b>Review Student Overall Grades</b><br /><br />
+•	ability to view an individual student’s grades overview and total program grade<br /><br />
+
+<b>Generate Report</b><br /><br />
+•	ability to generate a report for individual student grades and export to excel or PDF<br /><br />
+
+<b>2.	INSTRUCTOR ACCOUNT</b><br /><br />
+
+<b>Enter Grades / Review Student Grades</b><br /><br />
+•	ability to choose from a list of students (first name and last name)<br />
+•	ability to choose courses via course name<br />
+•	ability to choose modules<br />
+•	ability to add and modify grades for labs, participation, tests, and assignments<br />
+•	ability to add comments on assignments<br /><br />
+
+<b>3.	STUDENT ACCOUNT</b><br /><br />
+ 
+<b>Review Course Grades</b><br /><br />
+•	ability to choose from a list of courses via course name<br />
+•	ability to view course and module grades, grades for individual assignments, labs, etc. and instructor comments<br /><br /><br />
+
+
+
+<h2>Important</h2>
+
+
+<b>IMPORTANT FEATURES</b><br /><br />
+
+•	students are authorized to view results only once instructor has given permission<br />
+•	ability to populate an intake via spreadsheet import<br />
+•	site to contain white background with black text<br />
+•	cancel button to take Admin and Instructors out of areas where they do not wish to save any data<br />
+•	user has the ability to request a password change<br /><br /><br />
+
+
+<h2>Nice-to-Have</h2>
+
+
+<b>NICE-TO-HAVE  FEATURES</b><br /><br />
+
+•	ability to automatically email all students to notify them that their grades are available<br />
+•	ability to generate a report and export as a spreadsheet<br />
+•	ability to populate an intake via spreadsheet import<br />
+•	ability to publish grades once a course deliverable (i.e., assignment, lab, etc.) is finished marking<br />
+•	ability to reset forgotten password from the login page<br /><br /><br /><br /><br />
+
+                </div><!-- /.modal-body -->
+               </div><!-- content styling -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->    
+
+    </section>
+
+    @Scripts.Render("~/Resources/js/bootstrap.min.js")
+</body>
+</html>

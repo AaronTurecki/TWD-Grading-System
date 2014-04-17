@@ -1,0 +1,87 @@
+﻿@model twd_project.ViewModels.ParameterStudentsGrade
+
+@{
+    ViewBag.Title = "ParameterStudentGrades";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string message = ViewBag.Message;
+}
+<div class="container" id="container">
+    <h2>Update Entity Parameter<small>Grades</small>&nbsp;&nbsp;-&nbsp;&nbsp; @Html.DisplayFor(model => model.EntityParameterO.entityParameter1)</h2><hr />
+    <span style="line-height: 1.4em; width: 250px; display: inline;">@message<br /></span><br />
+    <div class="row">
+        <div class="col-lg-6" style="width: 450px;position:relative;">
+            <h4 style="line-height: 1.4em; width: 250px; display: inline;">@Model.IntakeO.intake1<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;@Model.ModuleO.module1<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Html.ActionLink(@Model.CourseO.course1, "SelectEntity", new { intakeId = @Model.IntakeO.intakeId,  courseId = @Model.CourseO.courseId })<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.CourseEntityO.courseEntity1<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.EntityParameterO.entityParameter1<br />
+            </h4><hr style="margin: 0;" /><br /><br />
+        </div>
+        <div>   
+            <form class='pull-left' style='width: 80px; margin: 12px 40px 0 0;' action='/Instructor/PublishParameterGrade' method='post' role='form'>
+                @Html.Raw("<input type='hidden' name='intakeId' value='")@Html.DisplayFor(model =>  model.IntakeO.intakeId) @Html.Raw("'>")
+                @Html.Raw("<input type='hidden' name='entityParameterId'  value='")@Html.DisplayFor(model =>  model.EntityParameterO.entityParameterId) @Html.Raw("'>")
+
+				<div class='controls' style='display: block;'>
+					<input type='submit' class='btn btn-primary' value='Publish ALL Grades' />
+				</div>
+		    </form>
+        </div>
+        <div class="col-lg">
+            <table class="table table-striped table-bordered table-hover">
+                <tr>
+                    <th><span>Select an existing Student</span></th>
+                    <th><span>Mark</span></th>
+                    <th><span>Late Penalty</span></th>
+                    <th><span>Comment</span></th>
+                </tr>
+
+                @{  foreach (twd_project.ViewModels.StudentGrades studentGrade in Model.StudentParameterGrades) {
+                    <tr>
+                         <td> <span style="display:inline-block;overflow: hidden;white-space: nowrap;width: 230px;height:25px;">
+                            <button type="submit" value="none" data-toggle="modal" data-target="#updateGrade" onclick="UpdateParameterGrade('@studentGrade.Student.firstName','@studentGrade.Student.lastName','@studentGrade.ParameterGrade', '@studentGrade.ParameterPenalty', '@studentGrade.ParameterComment', '@studentGrade.Student.userId')" style="margin-right: 15px; height:25px;">Update</button>
+                            <a href='@Url.Action("StudentArea", "Stu", new { inakeId = @Model.IntakeO.intakeId, studentUserId = @studentGrade.Student.userId }, null)'>@studentGrade.Student.firstName @studentGrade.Student.lastName</a></span>
+                        </td>
+                        @*<td> @studentGrade.Student.firstName @studentGrade.Student.lastName</td>*@
+                        <td> @studentGrade.ParameterGrade</td>
+                        <td> @studentGrade.ParameterPenalty</td>
+                        <td> @studentGrade.ParameterComment</td>
+                    </tr>
+                    } 
+                }
+            </table>
+        </div>
+
+        <div class="modal fade" id="updateGrade" tabindex="-1" role="dialog" aria-labelledby="mymodallabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 500px;">
+            <div class="modal-content">
+            <br />
+            <div style="margin-left:50px;height:600px;">
+                <h4 id="update-heading"></h4>
+                <hr style="margin: 0;" /><br />
+
+                <form action="/Instructor/UpdateParameterGrade" method="post" role="form" style="width: 270px;">
+                    <div class="form-group">
+                        <input type="hidden" name="intakeId"          value="@Model.IntakeO.intakeId">
+                        <input type="hidden" name="entityParameterId" value="@Model.EntityParameterO.entityParameterId">
+                        <input type="hidden" name="studentUserId"     value=" "     id="userId"    ><br />Grade<br />
+                        <input type="text"   name="grade"       id="grade"       class="form-control" ><br />Late Penalty<br />
+                        <input type="text"   name="latePenalty" id="latePenalty" class="form-control"><br />Comment<br />
+					    <textarea            name="comment"     id="comment"     cols="46" rows="15"></textarea>
+                        
+                        <p><br />
+                            <input type="submit" value="Update" />
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</div></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Resources/js/UpdateParameterGrade.js")
+}

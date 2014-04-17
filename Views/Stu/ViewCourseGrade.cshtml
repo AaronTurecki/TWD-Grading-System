@@ -1,0 +1,89 @@
+﻿@model twd_project.ViewModels.StudentCourseGrade
+
+@{  ViewBag.Title = "ViewCourseGrade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    @Html.Raw("<table class='table table-bordered table-hover pull-left' style='width: 1000px; font-size: .9em; vertical-align:text-center;'>")
+        @{ @Html.Raw("<tr> <td colspan='5' nowrap><span class='pull-left' style='font-size: 1.7em;'> &nbsp; &nbsp; &nbsp;")  @Html.ActionLink(@Model.UserDetail, "StudentArea", "Stu", new { studentUserId = @Model.UserId }, null) @Html.Raw("</span>")
+            
+                @Html.Raw("<form class='pull-right' style='width: 80px; margin: 0px 40px 0 0;' action='/Stu/ExportStudentCourseReport' method='post' role='form'>")
+                    @Html.Raw("<input type='hidden' name='intakeId' value='") @Html.DisplayFor(model =>  model.IntakeId) @Html.Raw("'>")
+                    @Html.Raw("<input type='hidden' name='studentUserId' value='") @Html.DisplayFor(model => model.UserId) @Html.Raw("'>")
+
+                    @Html.Raw("<div class='controls' style='display: block;'>")
+					    @Html.Raw("<input type='submit' class='btn btn-primary' value='Export to file' />");
+				    @Html.Raw("</div>");
+
+		        @Html.Raw("</form>");
+            
+            @Html.Raw("</td></tr>")
+        
+            @Html.Raw("<tr  bgcolor='#F2D9FC'> <td>") @Model.CourseName @Html.Raw("</td> <td style='text-align:center;'>Weight</td> <td style='text-align:center;'>Grade</td> <td style='text-align:center;'>Penalty</td> <td>Comment</td> </tr>")
+        }
+
+        @{  foreach (List<string> items in Model.CourseGroup) {
+                switch (items[0]) {
+                    case "E":
+                        @Html.Raw("<tr bgcolor='#D9FCD2'>")
+                        @Html.Raw("<td nowrap>")@Html.Raw(@items[1])@Html.Raw("</td>")
+                        @Html.Raw("<td nowrap style='text-align:center;'>") @items[2] @Html.Raw(" %</td>")
+                        @Html.Raw("<td nowrap style='text-align:center;'>") @items[3] @Html.Raw("</td>")
+                        @Html.Raw("<td nowrap style='text-align:center;'>") @items[4] @Html.Raw("</td>")
+                        @Html.Raw("<td nowrap style='text-align:left;'>")   @items[5] @Html.Raw("</td>")
+                        @Html.Raw("</tr>")
+                         break;
+                    case "P":
+                        @Html.Raw("<tr bgcolor='#EFFEEC'>")
+                        @Html.Raw("<td nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") @items[1] @Html.Raw("</td>")
+                        @Html.Raw("<td nowrap style='text-align:center;'>") @items[2] @Html.Raw(" %</td>")
+                        @Html.Raw("<td nowrap style='text-align:center;'>") @items[3] @Html.Raw("</td>")
+                        @Html.Raw("<td nowrap style='text-align:center;'>") @items[4] @Html.Raw("</td>")
+                        @Html.Raw("<td nowrap style='text-align:left;'>")   @items[5] @Html.Raw("</td>")
+                        @Html.Raw("</tr>")
+                        break;
+                    case "EP":
+                        @Html.Raw("<tr bgcolor='#D9FCD2'>")
+                        @Html.Raw("<td nowrap>")@Html.Raw(@items[1])@Html.Raw("</td>")
+                        @Html.Raw("<td nowrap style='text-align:center;'>") @items[2] @Html.Raw(" %</td>")
+                        @Html.Raw("<td nowrap style='text-align:center;'>") @items[3] @Html.Raw("</td>")
+                        @Html.Raw("<td colspan='2' nowrap style='text-align:center;'>") @items[4] @Html.Raw("</td>")
+                        @Html.Raw("</tr>")
+                        break;
+                    default:
+                        break;
+                    }
+          
+                
+                
+                
+                
+                
+             @* if (@items[0]== "E") {
+                    @Html.Raw("<tr bgcolor='#D9FCD2'>")
+                    @Html.Raw("<td nowrap>")@Html.Raw(@items[1])@Html.Raw("</td>")
+                } else {
+                    @Html.Raw("<tr bgcolor='#EFFEEC'>")
+                    @Html.Raw("<td nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") @items[1] @Html.Raw("</td>")
+                }
+
+                @Html.Raw("<td nowrap style='text-align:center;'>") @items[2] @Html.Raw(" %</td>")
+                @Html.Raw("<td nowrap style='text-align:center;'>") @items[3] @Html.Raw("</td>")
+                @Html.Raw("<td nowrap style='text-align:center;'>") @items[4] @Html.Raw("</td>")
+                @Html.Raw("<td nowrap style='text-align:left;'>")   @items[5] @Html.Raw("</td>")
+                @Html.Raw("</tr>") *@
+            } 
+        }
+        @{  @Html.Raw("<tr bgcolor='#F2D9FC'>")
+            @Html.Raw("<td nowrap>")@Model.CourseTotals[0] @Html.Raw("</td>")
+
+            @Html.Raw("<td nowrap style='text-align:left;'>")   @Model.CourseTotals[1] @Html.Raw("</td>")
+            @Html.Raw("<td nowrap style='text-align:center;'>") @Model.CourseTotals[2] @Html.Raw(" </td>")
+            @Html.Raw("<td nowrap style='text-align:center;'>") @Model.CourseTotals[3] @Html.Raw("</td>")
+            @Html.Raw("<td nowrap style='text-align:center;'>") @Model.CourseTotals[4] @Html.Raw("</td>")
+            @Html.Raw("</tr>")
+        }
+    @Html.Raw("</table>")
+
+</div>
