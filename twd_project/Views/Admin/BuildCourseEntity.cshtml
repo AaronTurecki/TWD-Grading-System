@@ -1,0 +1,118 @@
+﻿@model twd_project.ViewModels.BuildCourseEntity
+
+@{
+    ViewBag.Title = "BuildCourseEntity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string message = ViewBag.Message;
+}
+
+<div class="container">
+    <!-- ******************* Heading ******************* -->
+    <h2>Course Entity <small> Build</small>&nbsp;&nbsp;-&nbsp;&nbsp; @Html.DisplayFor(model => model.CourseEntityName)</h2>
+    <hr /><br />
+    
+    <p>@message</p>
+
+    <div class="row">
+
+        <!-- ******************* Navigation ******************* -->
+        <div class="col-lg-4 col-lg-offset-1">
+            <h4 style="line-height: 1.4em;width:200px;display:inline;"><strong>@Html.ActionLink(@Model.IntakeName, "BuildIntake", new { intakeId = @Model.IntakeId })<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;@Html.ActionLink(@Model.ModuleName, "BuildModule", new { intakeId = @Model.IntakeId,  moduleId = @Model.ModuleId })
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Html.ActionLink(@Model.CourseName, "BuildCourse", new { intakeId = @Model.IntakeId,  courseId = @Model.CourseId })</strong>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.CourseEntityName
+            </h4><hr style="margin:0;" />
+
+            <div class="col-lg-offset-1">
+                <table>
+                    @{  int totalPC = 0;
+                        foreach (twd_project.EntityParameter item in Model.EntityParameters) {
+                            <tr><td>@item.entityParameterWeight  % - </td><td>@item.entityParameter1</td></tr>
+                            totalPC += Convert.ToInt32(item.entityParameterWeight);                
+                        }   
+
+                    <tr><td>@totalPC.ToString() % -</td><td>Total</td></tr>
+                    }
+                </table>
+            </div>
+        </div><br />
+        
+        <!-- ******************* Add new Entity Parameter ******************* -->
+        <div class="col-lg-6">
+            <button class="btn btn-primary" style="width: 200px;" data-toggle="modal" data-target="#addEntityParameterModal">Add entity parameter</button>&nbsp;&nbsp;
+            <button class="btn btn-primary" style="width: 200px;" data-toggle="modal" data-target="#removeEntityParameterModal">Remove entity parameter</button><br /><br /><br /><br />
+        </div>
+    </div>
+
+    <!-- ******************* Add Entity Parameter Modal ******************* -->
+    <div class="modal fade" id="addEntityParameterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 450px;">
+            <div class="modal-content">
+                <div style="margin-left:50px;margin-right:50px;margin-top:20px;height:350px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="addEntityParameterLabel">Add Entity Parameter</h3>
+                </div>
+            
+                <div class="modal-body">
+                    <form class="form-horizontal" action="/Admin/AddEntityParameter" method="post" role="form">
+                        <div class="form-group">
+                            <input type="hidden" name="courseEntityId" value="@Html.DisplayFor(model => model.CourseEntityId)">
+                            <input type="hidden" name="intakeId"       value="@Html.DisplayFor(model => model.IntakeId)">
+
+                            Entity Parameter <br /><input class="form-control" type="text" name="entityParameter"><br />
+                            Entity Parameter Weight <br /><input class="form-control" type="text" name="entityParameterWeight"><br />
+                        </div>
+
+			            <div>
+				            <div class="controls">
+					            <input type="submit" class="btn btn-primary" value="Add Entity Parameter" />
+				            </div>
+			            </div> 
+		            </form>
+                </div><!-- /.modal-body -->
+               </div><!-- content styling -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- ******************* Remove Entity Parameter Modal ******************* -->
+    <div class="modal fade" id="removeEntityParameterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 450px;">
+            <div class="modal-content">
+                <div style="margin-left:50px;margin-right:50px;margin-top:20px;height:250px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="removeEntityParameterLabel">Remove Entity Parameter</h3>
+                </div>
+            
+                <div class="modal-body">
+                    <form class="form-horizontal" action="/Admin/RemoveEntityParameter" method="post" role="form">
+                        <input type="hidden" name="courseEntityId" value="@Html.DisplayFor(model => model.CourseEntityId)">
+                        <input type="hidden" name="intakeId"       value="@Html.DisplayFor(model => model.IntakeId)">
+
+                        <select class="form-control" name="entityParameterId">
+                            @{  foreach (twd_project.EntityParameter item in Model.EntityParameters) {
+                                    <option value="@item.entityParameterId">@item.entityParameter1</option>
+                                }   
+                            }
+                        </select><br />
+
+			            <div>
+				            <div class="controls">
+					            <input type="submit" class="btn btn-primary" value="Remove Entity Parameter" />
+				            </div>
+			            </div>
+		            </form>
+                </div><!-- /.modal-body -->
+               </div><!-- content styling -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+@*    @Scripts.Render("~/Resources/js/buildCourseEntity.js")*@
+}
