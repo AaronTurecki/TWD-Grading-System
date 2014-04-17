@@ -1,0 +1,56 @@
+﻿@model twd_project.ViewModels.BuildCourseInstructor
+
+@{
+    ViewBag.Title = "SelectEntity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <h2>Course Entity <small>Select</small>&nbsp;&nbsp;-&nbsp;&nbsp; @Html.DisplayFor(model => model.CourseName)</h2><hr /><br />
+
+    <div>
+        <div >
+            <h4 style="line-height: 1.4em;width:200px;display:inline;">@Model.IntakeName<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;@Model.ModuleName <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.CourseName<br />
+            </h4><hr style="margin:0;" />
+        </div>
+
+        <div class="col-lg-offset-1">
+            <table>
+                @{  int totalPC = 0;
+                    foreach (twd_project.CourseEntity item in Model.CourseEntities) {
+                        <tr><td class="text-right">@item.courseEntityWeight  % - </td><td class="text-left">@Html.ActionLink(@item.courseEntity1, "SelectStudent", "Instructor", new { intakeId = @Model.IntakeId, courseEntityId = @item.courseEntityID }, null)</td></tr>
+                        totalPC += Convert.ToInt32(item.courseEntityWeight);                
+                    }
+                    
+                    foreach (List<string> items in Model.EntityParameters) {
+                        if (@items[0]== "E") {
+                            @Html.Raw("<tr>")
+                            @Html.Raw("<td nowrap class='text-right'>")@items[2] @Html.Raw(" % - </td>")
+                            @Html.Raw("<td nowrap class='text-left'>")@items[3] @Html.Raw("</td>")
+                            totalPC += Convert.ToInt32(items[2]);                
+                    } else {
+                            @Html.Raw("<tr><td></td>")
+                            @Html.Raw("<td nowrap class='text-right'>")@items[2] @Html.Raw(" % - </td>")
+                            @Html.Raw("<td nowrap class='text-left'>")@Html.ActionLink(@items[3], "ParameterStudentGrades", "Instructor", new { intakeId = @Model.IntakeId, entityParameterId = @items[1]  }, null)@Html.Raw("</td>")
+                        }
+                        @Html.Raw("</tr>")
+                    } 
+                   
+                    if (totalPC > 100) {
+                        <tr style="color: red;"><td>@totalPC.ToString() % -</td><td>Total</td></tr>
+                    } else {
+                        <tr style="color: black;"><td>@totalPC.ToString() % -</td><td>Total</td></tr>
+                    }
+                }
+            </table>
+        </div><br />
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Resources/js/buildCourse.js")
+}

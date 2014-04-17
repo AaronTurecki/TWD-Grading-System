@@ -1,0 +1,36 @@
+﻿@model twd_project.Intake
+
+@{
+    ViewBag.Title = "ViewStudents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1>@Model.intake1 Students  <small>@String.Format("{0:d}", Model.startDate) ~ @String.Format("{0:d}", Model.endDate)</small></h1>
+</div>
+<div>
+    <a href='@Url.Action("RegisterUser", "Admin", new { intake = Model.intake1 })'>
+        <input class="btn btn-info" value="Add Students"></a>
+    <a href='@Url.Action("AdminArea", "Admin", new { intakeID = Model.intakeId })'>
+        <input class="btn btn-info" value="View Intake"></a><br /><br />
+
+    <div>
+
+        <table class="table table-striped table-bordered table-hover">
+            <tr>
+                <th style="width: 50%;">Name</th>
+                <th>Email</th>
+            </tr>
+
+            @foreach (var student in Model.TWD_User)
+            {
+                <tr>
+                    <td><a href='@Url.Action("StudentArea", "Student", new { studentID = student.userId })'>@student.firstName @student.lastName</a></td>
+                    <td>@student.userName</td>
+                </tr>
+
+    }
+
+        </table>
+    </div>
+</div>

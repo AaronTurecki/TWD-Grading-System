@@ -1,0 +1,74 @@
+﻿@model twd_project.TWD_User
+
+@{
+    ViewBag.Title = "StudentAreaEntity";
+}
+
+
+<fieldset>
+    <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th>Courses</th>
+                        <th>@Html.DisplayFor(model => model.firstName)  @Html.DisplayFor(model => model.lastName)</th>
+                        <th>Intake @Html.DisplayFor(model => model.intakeId) </th>
+                    </tr>
+    
+   <tr>
+                        <th>Course</th>
+                        <th>Weight</th>
+                        <th>Grade</th>
+                        <th>Comments</th>
+
+                    </tr>
+     @foreach (var modules in Model.Intake.Modules){
+         
+        foreach(var courses in modules.Courses){
+        if (courses.courseId == ViewBag.CourseId){
+            foreach (var courseEnt in courses.CourseEntities) {
+                @Html.Partial("~/Views/Shared/Partials/tablerowOpen.cshtml")
+           
+       <td>   @Html.ActionLink(@courseEnt.courseEntity1,"StudentAreaParam", new {@courseEnt.courseEntityID,@ViewBag.studentId})</td>
+           <td> @courseEnt.courseEntityWeight</td>
+         
+            decimal var1 = 0;
+            decimal courseWeight = 0;
+            foreach (var courseEntGrade in courseEnt.CourseEntityGrades)
+            {
+               
+                   <td> @courseEntGrade.grade</td>
+                   <td> @courseEntGrade.comment</td>
+         
+                              
+            }
+            decimal paramWeight = 0;
+            decimal paramVar = 0;
+
+
+            foreach (var entityParam in courseEnt.EntityParameters)
+                {
+                    foreach (var entityGrade in entityParam.EntityParameterGrades)
+                    {
+                       
+                            paramWeight = (decimal)courseEnt.courseEntityWeight;
+                            decimal var4 = .01m;
+
+                            decimal var2 = (decimal)entityGrade.grade;
+                            decimal var3 = (decimal)entityParam.entityParameterWeight;
+                            paramVar += (((decimal)courseEnt.courseEntityWeight * var4) * (var2 * (var3 * var4)));
+                            
+                            
+                        
+                    }
+               
+            }
+            
+             decimal grade = (( paramVar / (decimal)courseEnt.courseEntityWeight)*100); 
+                if (grade!=0){ 
+                    <td>@grade </td>
+                @Html.Partial("~/Views/Shared/Partials/tablerowClose.cshtml")
+     }
+            }
+        }
+        }
+    }@Html.Partial("~/Views/Shared/Partials/tableClose.cshtml")
+</fieldset>

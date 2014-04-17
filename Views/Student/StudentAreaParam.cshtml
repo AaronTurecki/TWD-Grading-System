@@ -1,0 +1,62 @@
+﻿@model twd_project.TWD_User
+
+@{
+    ViewBag.Title = "StudentAreaParam";
+}
+
+
+<fieldset>
+    <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th>Course Parameters </th>
+                        <th>@Html.DisplayFor(model => model.firstName)  @Html.DisplayFor(model => model.lastName)</th>
+                        <th>Intake @Html.DisplayFor(model => model.intakeId) </th>
+                    </tr>
+    @{
+        bool NoOutput = true; 
+        } <tr>
+                        <th>Parameter Name </th>
+                        <th>weight</th>
+                        <th>Grade</th>
+                    </tr> 
+    @foreach (var modules in Model.Intake.Modules){
+        foreach(var courses in modules.Courses){
+        foreach (var courseEnt in courses.CourseEntities) {
+           
+           foreach (var entityParams in courseEnt.EntityParameters) {
+                 
+                                    
+                    foreach (var entityGrade in entityParams.EntityParameterGrades)
+                    {
+                       
+                            if (entityParams.courseEntityId == ViewBag.CourseId)
+                            { 
+                                
+                    <tr>
+                            <td>@entityParams.entityParameter1 </td>
+                                <td>  @entityParams.entityParameterWeight </td>
+                                      <td>@entityGrade.grade </td>
+                                      <td>@entityGrade.comment </td>
+
+                                         </tr>
+               
+
+                                NoOutput = false; 
+                            
+                        }
+                   
+                   
+               
+              
+                  }
+                 }
+            
+           }
+        }
+    } </table>
+    @{
+        if (NoOutput==true){
+        <h4>No Breakdown </h4>
+        }
+        }
+</fieldset>
